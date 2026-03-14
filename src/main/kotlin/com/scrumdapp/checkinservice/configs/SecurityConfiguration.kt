@@ -16,6 +16,7 @@ public class SecurityConfiguration: WebMvcConfigurer {
     @Bean
     public fun filterChain(httpSec: HttpSecurity): SecurityFilterChain {
         httpSec
+            .csrf { it.disable() }
             .authorizeHttpRequests(this::createRequestMatcher)
 
 
@@ -24,6 +25,6 @@ public class SecurityConfiguration: WebMvcConfigurer {
 
     private fun createRequestMatcher(auth: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry) {
         auth
-            .requestMatchers("/checkin").permitAll()
+            .requestMatchers("/**").permitAll()
     }
 }
