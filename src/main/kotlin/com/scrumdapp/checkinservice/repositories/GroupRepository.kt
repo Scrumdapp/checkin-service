@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository
 interface GroupRepository: JpaRepository<Group, Int>{
 
     fun findGroupById(id: Int): Group?
+    fun deleteGroupById(id: Int)
 }
