@@ -3,7 +3,6 @@ package com.scrumdapp.checkinservice.services
 import com.scrumdapp.checkinservice.entities.Group
 import com.scrumdapp.checkinservice.repositories.GroupFeatureRepository
 import com.scrumdapp.checkinservice.repositories.GroupRepository
-import org.springframework.data.repository.support.Repositories
 import org.springframework.stereotype.Service
 
 

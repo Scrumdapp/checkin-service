@@ -15,9 +15,11 @@ class CheckIn {
     var userId: Int = 0
 
     @Id
-    @OneToMany(mappedBy = "CheckIn", cascade = [(CascadeType.ALL)])
-    @JoinColumn(referencedColumnName = "id")
     var groupId: Int = 0
+
+    @ManyToOne
+    @PrimaryKeyJoinColumn(name="groupId", referencedColumnName = "id")
+     var group: Group? = null
 
     @Id
     var date: Date? = null
