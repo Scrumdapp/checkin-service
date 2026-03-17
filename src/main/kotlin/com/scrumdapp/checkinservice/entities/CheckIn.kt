@@ -5,10 +5,11 @@ import java.io.Serializable
 import java.util.*
 
 
-class CheckInId(private val UserId: Int, private val GroupId: Int, private val Date: Date?) : Serializable
+data class CheckInId(val userId: Int = 0, val groupId: Int = 0, val date: Date? = null) : Serializable
 
 @Entity
 @IdClass(CheckInId::class)
+@Table(name = "check_in")
 class CheckIn {
 
     @Id
@@ -18,7 +19,8 @@ class CheckIn {
     var groupId: Int = 0
 
     @ManyToOne
-    @PrimaryKeyJoinColumn(name="groupId", referencedColumnName = "id")
+    @MapsId("groupId")
+    @JoinColumn(name = "group_id")
      var group: Group? = null
 
     @Id

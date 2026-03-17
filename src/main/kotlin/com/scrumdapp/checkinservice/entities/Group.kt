@@ -23,6 +23,4 @@ public class Group {
         inverseJoinColumns = [JoinColumn(name = "group_feature_key")]
     )
      var features: MutableSet<GroupFeature> = mutableSetOf()
-
-
 }

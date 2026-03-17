@@ -1,7 +1,6 @@
 package com.scrumdapp.checkinservice.repositories
 
 import com.scrumdapp.checkinservice.entities.Group
-import com.scrumdapp.checkinservice.entities.GroupFeature
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
@@ -11,3 +10,4 @@ interface GroupRepository: JpaRepository<Group, Int>{
     fun findGroupById(id: Int): Group?
     fun deleteGroupById(id: Int)
 }
+
