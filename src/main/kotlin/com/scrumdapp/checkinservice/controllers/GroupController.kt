@@ -28,6 +28,7 @@ class GroupController(
 
     @PostMapping
     fun createGroup(@RequestBody group: Group): ResponseEntity<Group> {
+        println("Group: ${group.name} + Features: ${group.features}")
         return ResponseEntity.status(HttpStatus.CREATED).body(groupService.createGroup(group))
     }
 

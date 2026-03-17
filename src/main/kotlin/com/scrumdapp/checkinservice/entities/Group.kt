@@ -12,9 +12,9 @@ public class Group {
 
      var name: String? = null
 
-     var backgroundId: Int? = null
+     var background_preference: Int? = null
 
-     var iconId: Int? = null
+     var icon_preference: Int? = null
 
     @ManyToMany
     @JoinTable(
