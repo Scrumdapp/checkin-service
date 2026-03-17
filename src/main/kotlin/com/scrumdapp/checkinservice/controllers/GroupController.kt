@@ -6,7 +6,10 @@ import com.scrumdapp.checkinservice.repositories.GroupRepository
 import com.scrumdapp.checkinservice.services.GroupService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import com.scrumdapp.checkinservice.repositories.CheckInRepository;
 import java.util.Objects
+import com.scrumdapp.checkinservice.entities.CheckIn
+import com.scrumdapp.checkinservice.services.CheckInService;
 
 @RestController
 @RequestMapping("/groups")
@@ -25,6 +28,9 @@ class GroupController(
         println("Group: ${group?.id}")
         return ResponseEntity.ok(group);
     }
+
+    @GetMapping("/{id}/users/{userId}/checkins?{startdate}&{enddate}")
+
 
     @PostMapping
     fun createGroup(@RequestBody group: Group): ResponseEntity<Group> {

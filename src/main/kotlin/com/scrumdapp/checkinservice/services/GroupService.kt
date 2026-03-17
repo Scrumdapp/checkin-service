@@ -4,7 +4,7 @@ import com.scrumdapp.checkinservice.entities.Group
 import com.scrumdapp.checkinservice.repositories.GroupFeatureRepository
 import com.scrumdapp.checkinservice.repositories.GroupRepository
 import org.springframework.stereotype.Service
-
+import java.text.SimpleDateFormat
 
 interface GroupService {
     fun getAllGroups(): List<Group>
@@ -13,6 +13,7 @@ interface GroupService {
     fun createGroup(group: Group): Group
     fun updateGroup(group: Group): Group
     fun deleteGroup(id: Int)
+
 }
 
 @Service

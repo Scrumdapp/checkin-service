@@ -10,6 +10,7 @@ fun findById(id: CheckInId): CheckIn?
 fun deleteById(id: CheckInId)
 fun createCheckIn(checkIn: CheckIn): CheckIn
 fun updateCheckIn(checkIn: CheckIn): CheckIn
+
 }
 
 @Service
@@ -31,4 +32,6 @@ class CheckInServiceImpl(
     override fun updateCheckIn(checkIn: CheckIn): CheckIn {
         return checkInRepository.save(checkIn)
     }
+
+
 }
