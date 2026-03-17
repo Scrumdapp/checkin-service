@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service
 interface CheckInService {
 fun findById(id: CheckInId): CheckIn?
 fun deleteById(id: CheckInId)
-fun createCheckIn(checkIn: CheckIn): CheckIn
-fun updateCheckIn(checkIn: CheckIn): CheckIn
+fun saveCheckIn(checkIn: CheckIn): CheckIn
+
 
 }
 
@@ -25,11 +25,9 @@ class CheckInServiceImpl(
         checkInRepository.deleteById(id)
     }
 
-    override fun createCheckIn(checkIn: CheckIn): CheckIn {
-        return checkInRepository.save(checkIn)
-    }
 
-    override fun updateCheckIn(checkIn: CheckIn): CheckIn {
+
+    override fun saveCheckIn(checkIn: CheckIn): CheckIn {
         return checkInRepository.save(checkIn)
     }
 
