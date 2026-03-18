@@ -1,5 +1,6 @@
 package com.scrumdapp.checkinservice.services
 
+import com.scrumdapp.checkinservice.dto.CheckInDto
 import com.scrumdapp.checkinservice.entities.CheckIn
 import com.scrumdapp.checkinservice.entities.CheckInId
 import com.scrumdapp.checkinservice.repositories.CheckInRepository;
@@ -10,7 +11,7 @@ fun findById(id: CheckInId): CheckIn?
 fun deleteById(id: CheckInId)
 fun createCheckIn(checkIn: CheckIn): CheckIn
 fun updateCheckIn(checkIn: CheckIn): CheckIn
-
+fun findByGroupId(groupId: String): List<CheckIn>
 }
 
 @Service
@@ -33,5 +34,7 @@ class CheckInServiceImpl(
         return checkInRepository.save(checkIn)
     }
 
-
+    override fun findByGroupId(groupId: String): List<CheckIn> {
+        return checkInRepository.findByGroupId(groupId)
+    }
 }

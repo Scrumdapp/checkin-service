@@ -2,19 +2,18 @@ package com.scrumdapp.checkinservice.controllers
 
 import com.scrumdapp.checkinservice.entities.Group
 import org.springframework.http.ResponseEntity
-import com.scrumdapp.checkinservice.repositories.GroupRepository
 import com.scrumdapp.checkinservice.services.GroupService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import com.scrumdapp.checkinservice.repositories.CheckInRepository;
-import java.util.Objects
 import com.scrumdapp.checkinservice.entities.CheckIn
+import com.scrumdapp.checkinservice.dto.CheckInDto
 import com.scrumdapp.checkinservice.services.CheckInService;
 
 @RestController
 @RequestMapping("/groups")
 class GroupController(
-    private val groupService: GroupService
+    private val groupService: GroupService,
+    private val checkInService: CheckInService
 ) {
 
     @GetMapping
@@ -24,12 +23,17 @@ class GroupController(
 
     @GetMapping("/{id}")
     fun getGroup(@PathVariable id: Int): ResponseEntity<Group> {
-        var group = groupService.getGroupById(id)
+        val group = groupService.getGroupById(id)
         println("Group: ${group?.id}")
         return ResponseEntity.ok(group);
     }
 
-    @GetMapping("/{id}/users/{userId}/checkins?{startdate}&{enddate}")
+    @GetMapping("/{id}/checkins")
+    fun getGroupCheckIns(@PathVariable id: Int): List<CheckIn> {
+        val group = groupService.getGroupById(id)
+        val checkIns: List<CheckIn> = checkInService.findByGroupId(group?.id.toString())
+        return checkIns
+    }
 
 
     @PostMapping
