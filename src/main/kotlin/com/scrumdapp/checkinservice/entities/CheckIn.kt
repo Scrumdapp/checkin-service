@@ -2,10 +2,9 @@ package com.scrumdapp.checkinservice.entities
 
 import jakarta.persistence.*
 import java.io.Serializable
-import java.util.*
+import java.time.LocalDate
 
-
-data class CheckInId(val userId: Int = 0, val groupId: Int = 0, val date: Date? = null) : Serializable
+data class CheckInId(val userId: Int = 0, val groupId: Int = 0, val date: LocalDate? = null) : Serializable
 
 @Entity
 @IdClass(CheckInId::class)
@@ -24,7 +23,7 @@ class CheckIn {
      var group: Group? = null
 
     @Id
-    var date: Date? = null
+    var date: LocalDate? = null
 
     var obstacleComment: String? = null
 
