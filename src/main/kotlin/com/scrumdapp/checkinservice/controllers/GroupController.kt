@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*
 import com.scrumdapp.checkinservice.entities.CheckIn
 import com.scrumdapp.checkinservice.dto.CheckInDto
 import com.scrumdapp.checkinservice.services.CheckInService;
+import org.springframework.format.annotation.DateTimeFormat
+import java.util.Date
 
 @RestController
 @RequestMapping("/groups")
@@ -29,12 +31,19 @@ class GroupController(
     }
 
     @GetMapping("/{id}/checkins")
-    fun getGroupCheckIns(@PathVariable id: Int): List<CheckIn> {
-        val group = groupService.getGroupById(id)
-        val checkIns: List<CheckIn> = checkInService.findByGroupId(group?.id.toString())
-        return checkIns
+    fun getGroupCheckIns(@PathVariable id: Int): List<CheckInDto> {
+        return checkInService.findByGroupId(id)
     }
 
+    @GetMapping("/{groupId}/users/{userId}/checkins")
+    fun getUserCheckInsBetweenDates(
+        @PathVariable groupId: Int,
+        @PathVariable userId: Int,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startdate: Date,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) enddate: Date
+    ): List<CheckInDto> {
+        return checkInService.findByUserAndDateRange(groupId, userId, startdate, enddate)
+    }
 
     @PostMapping
     fun createGroup(@RequestBody group: Group): ResponseEntity<Group> {

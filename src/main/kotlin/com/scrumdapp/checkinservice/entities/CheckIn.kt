@@ -43,7 +43,5 @@ class CheckIn {
     var checkoutStars: Int? = null
 
     var checkoutComment: String? = null
-
-
 }
 
