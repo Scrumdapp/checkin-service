@@ -9,6 +9,7 @@ import com.scrumdapp.checkinservice.entities.CheckIn
 import com.scrumdapp.checkinservice.dto.CheckInDto
 import com.scrumdapp.checkinservice.services.CheckInService;
 import org.springframework.format.annotation.DateTimeFormat
+import java.time.LocalDateTime
 import java.util.Date
 
 @RestController
@@ -31,8 +32,12 @@ class GroupController(
     }
 
     @GetMapping("/{id}/checkins")
-    fun getGroupCheckIns(@PathVariable id: Int): List<CheckInDto> {
+    fun getGroupCheckIns(
+        @PathVariable id: Int,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) dateTime: LocalDateTime
+    ): List<CheckInDto> {
         return checkInService.findByGroupId(id)
+
     }
 
     @GetMapping("/{groupId}/users/{userId}/checkins")

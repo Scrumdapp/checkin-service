@@ -18,4 +18,8 @@ interface CheckInRepository : JpaRepository<CheckIn, CheckInId> {
         end: Date
     ): List<CheckIn>
 
+    fun findByGroupIdAndDate(
+        groupId: Int,
+        date: Date
+    ): List<CheckIn>
 }
