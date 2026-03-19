@@ -7,6 +7,8 @@ import com.scrumdapp.checkinservice.mappers.toEntity
 import com.scrumdapp.checkinservice.repositories.CheckInRepository
 import org.springframework.stereotype.Service
 import java.util.Date
+import java.time.LocalDate
+
 
 interface CheckInService {
 
@@ -23,13 +25,13 @@ interface CheckInService {
     fun findByUserAndDateRange(
         groupId: Int,
         userId: Int,
-        start: Date,
-        end: Date
+        start: LocalDate,
+        end: LocalDate
     ): List<CheckInDto>
 
     fun findByGroupIdAndDate(
         groupId: Int,
-        date: Date,
+        date: LocalDate,
     ): List<CheckInDto>
 
 }
@@ -44,6 +46,8 @@ class CheckInServiceImpl(
             .orElse(null)
             ?.toDto()
     }
+
+
 
     override fun deleteById(id: CheckInId) {
         checkInRepository.deleteById(id)
@@ -67,8 +71,8 @@ class CheckInServiceImpl(
     override fun findByUserAndDateRange(
         groupId: Int,
         userId: Int,
-        start: Date,
-        end: Date
+        start: LocalDate,
+        end: LocalDate
     ): List<CheckInDto> {
         return checkInRepository
             .findByGroupIdAndUserIdAndDateBetween(groupId, userId, start, end)
@@ -76,7 +80,7 @@ class CheckInServiceImpl(
     }
 
     override fun findByGroupIdAndDate(
-        groupId: Int, date: Date
+        groupId: Int, date: LocalDate
     ): List<CheckInDto> {
         return checkInRepository.findByGroupIdAndDate(groupId, date).map { it.toDto() }
     }

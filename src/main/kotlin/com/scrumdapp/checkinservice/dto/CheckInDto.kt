@@ -7,7 +7,7 @@ import java.util.*
 data class CheckInDto(
     val userId: Int,
     val groupId: Int,
-    val date: Date?,
+    val date: Date,
 
     val obstacle_comment: String?,
     val presence: Int?,

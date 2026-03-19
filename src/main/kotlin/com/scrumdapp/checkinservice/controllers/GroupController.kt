@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import java.util.logging.Logger
+import java.time.LocalDate
 
 @RestController
 @RequestMapping("/groups")
@@ -34,7 +35,7 @@ class GroupController(
     @GetMapping("/{id}/checkins")
     fun getGroupCheckIns(
         @PathVariable id: Int,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateTime: Date
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateTime: LocalDate
     ): List<CheckInDto> {
 
         return checkInService.findByGroupIdAndDate(id, dateTime)
@@ -44,8 +45,8 @@ class GroupController(
     fun getUserCheckInsBetweenDates(
         @PathVariable groupId: Int,
         @PathVariable userId: Int,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startdate: Date,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) enddate: Date
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startdate: LocalDate,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) enddate: LocalDate
     ): List<CheckInDto> {
         return checkInService.findByUserAndDateRange(groupId, userId, startdate, enddate)
     }
