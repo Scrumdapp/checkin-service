@@ -27,6 +27,11 @@ interface CheckInService {
         end: Date
     ): List<CheckInDto>
 
+    fun findByGroupIdAndDate(
+        groupId: Int,
+        date: Date,
+    ): List<CheckInDto>
+
 }
 
 @Service
@@ -58,6 +63,7 @@ class CheckInServiceImpl(
         return checkInRepository.findByGroupId(groupId)
             .map { it.toDto() }
     }
+
     override fun findByUserAndDateRange(
         groupId: Int,
         userId: Int,
@@ -69,4 +75,9 @@ class CheckInServiceImpl(
             .map { it.toDto() }
     }
 
+    override fun findByGroupIdAndDate(
+        groupId: Int, date: Date
+    ): List<CheckInDto> {
+        return checkInRepository.findByGroupIdAndDate(groupId, date).map { it.toDto() }
+    }
 }
