@@ -1,16 +1,16 @@
 package com.scrumdapp.checkinservice.controllers
 
-import com.scrumdapp.checkinservice.entities.Group
-import org.springframework.http.ResponseEntity
-import com.scrumdapp.checkinservice.services.GroupService
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
-import com.scrumdapp.checkinservice.entities.CheckIn
 import com.scrumdapp.checkinservice.dto.CheckInDto
-import com.scrumdapp.checkinservice.services.CheckInService;
+import com.scrumdapp.checkinservice.entities.Group
+import com.scrumdapp.checkinservice.services.CheckInService
+import com.scrumdapp.checkinservice.services.GroupService
+import org.slf4j.LoggerFactory
 import org.springframework.format.annotation.DateTimeFormat
-import java.time.LocalDateTime
-import java.util.Date
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+import java.util.*
+import java.util.logging.Logger
 
 @RestController
 @RequestMapping("/groups")
@@ -34,10 +34,10 @@ class GroupController(
     @GetMapping("/{id}/checkins")
     fun getGroupCheckIns(
         @PathVariable id: Int,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) dateTime: LocalDateTime
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateTime: Date
     ): List<CheckInDto> {
-        return checkInService.findByGroupId(id)
 
+        return checkInService.findByGroupIdAndDate(id, dateTime)
     }
 
     @GetMapping("/{groupId}/users/{userId}/checkins")
