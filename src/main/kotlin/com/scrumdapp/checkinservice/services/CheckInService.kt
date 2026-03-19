@@ -1,15 +1,31 @@
 package com.scrumdapp.checkinservice.services
 
-import com.scrumdapp.checkinservice.entities.CheckIn
+import com.scrumdapp.checkinservice.dto.CheckInDto
 import com.scrumdapp.checkinservice.entities.CheckInId
-import com.scrumdapp.checkinservice.repositories.CheckInRepository;
+import com.scrumdapp.checkinservice.mappers.toDto
+import com.scrumdapp.checkinservice.mappers.toEntity
+import com.scrumdapp.checkinservice.repositories.CheckInRepository
 import org.springframework.stereotype.Service
+import java.util.Date
 
 interface CheckInService {
-fun findById(id: CheckInId): CheckIn?
-fun deleteById(id: CheckInId)
-fun saveCheckIn(checkIn: CheckIn): CheckIn
 
+    fun findById(id: CheckInId): CheckInDto?
+
+    fun deleteById(id: CheckInId)
+
+    fun createCheckIn(checkIn: CheckInDto): CheckInDto
+
+    fun updateCheckIn(checkIn: CheckInDto): CheckInDto
+
+    fun findByGroupId(groupId: Int): List<CheckInDto>
+
+    fun findByUserAndDateRange(
+        groupId: Int,
+        userId: Int,
+        start: Date,
+        end: Date
+    ): List<CheckInDto>
 
 }
 
@@ -17,19 +33,40 @@ fun saveCheckIn(checkIn: CheckIn): CheckIn
 class CheckInServiceImpl(
     private val checkInRepository: CheckInRepository,
 ) : CheckInService {
-    override fun findById(id: CheckInId): CheckIn? {
-        return checkInRepository.findById(id).orElse(null)
+
+    override fun findById(id: CheckInId): CheckInDto? {
+        return checkInRepository.findById(id)
+            .orElse(null)
+            ?.toDto()
     }
 
     override fun deleteById(id: CheckInId) {
         checkInRepository.deleteById(id)
     }
 
-
-
-    override fun saveCheckIn(checkIn: CheckIn): CheckIn {
-        return checkInRepository.save(checkIn)
+    override fun createCheckIn(checkIn: CheckInDto): CheckInDto {
+        val saved = checkInRepository.save(checkIn.toEntity())
+        return saved.toDto()
     }
 
+    override fun updateCheckIn(checkIn: CheckInDto): CheckInDto {
+        val updated = checkInRepository.save(checkIn.toEntity())
+        return updated.toDto()
+    }
+
+    override fun findByGroupId(groupId: Int): List<CheckInDto> {
+        return checkInRepository.findByGroupId(groupId)
+            .map { it.toDto() }
+    }
+    override fun findByUserAndDateRange(
+        groupId: Int,
+        userId: Int,
+        start: Date,
+        end: Date
+    ): List<CheckInDto> {
+        return checkInRepository
+            .findByGroupIdAndUserIdAndDateBetween(groupId, userId, start, end)
+            .map { it.toDto() }
+    }
 
 }
