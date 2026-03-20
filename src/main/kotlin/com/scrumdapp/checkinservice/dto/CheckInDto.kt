@@ -1,13 +1,13 @@
 package com.scrumdapp.checkinservice.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import java.util.*
+import java.time.LocalDate
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class CheckInDto(
     val userId: Int,
     val groupId: Int,
-    val date: Date,
+    val date: LocalDate?,
 
     val obstacle_comment: String?,
     val presence: Int?,

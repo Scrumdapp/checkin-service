@@ -46,9 +46,15 @@ class GroupController(
         @PathVariable groupId: Int,
         @PathVariable userId: Int,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startdate: LocalDate,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) enddate: LocalDate
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) enddate: LocalDate?
     ): List<CheckInDto> {
-        return checkInService.findByUserAndDateRange(groupId, userId, startdate, enddate)
+
+        return checkInService.findByUserAndDateRange(
+            groupId,
+            userId,
+            startdate,
+            enddate ?: startdate
+        )
     }
 
     @PostMapping

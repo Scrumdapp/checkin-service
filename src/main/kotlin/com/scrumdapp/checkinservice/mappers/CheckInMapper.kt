@@ -7,7 +7,7 @@ fun CheckIn.toDto(): CheckInDto {
     return CheckInDto(
         userId = userId,
         groupId = groupId,
-        date = date!!,
+        date = date,
 
 
         obstacle_comment = obstacleComment,
