@@ -64,7 +64,7 @@ CREATE TABLE check_in
 (
     user_id          INTEGER                     NOT NULL,
     group_id         INTEGER                     NOT NULL,
-    date             TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    date             DATE NOT NULL,
     obstacle_comment VARCHAR(255),
     presence         INTEGER,
     presence_comment VARCHAR(255),
