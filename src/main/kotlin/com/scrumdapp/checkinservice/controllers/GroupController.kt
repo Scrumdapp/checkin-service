@@ -1,6 +1,7 @@
 package com.scrumdapp.checkinservice.controllers
 
 import com.scrumdapp.checkinservice.dto.CheckInDto
+import com.scrumdapp.checkinservice.entities.CheckIn
 import com.scrumdapp.checkinservice.entities.Group
 import com.scrumdapp.checkinservice.services.CheckInService
 import com.scrumdapp.checkinservice.services.GroupService
@@ -66,6 +67,16 @@ class GroupController(
     @PatchMapping
     fun updateGroup(@RequestBody group: Group): ResponseEntity<Group> {
         return ResponseEntity.ok(groupService.updateGroup(group))
+    }
+
+    @PatchMapping("/{id}/checkins")
+    fun updateCheckIn(@RequestBody checkIn: CheckInDto): ResponseEntity<CheckInDto> {
+        return ResponseEntity.ok(checkInService.updateCheckIn(checkIn))
+    }
+
+    @PatchMapping("/{groupId}/users/{userId}/checkins")
+    fun updateUserCheckIn(@RequestBody checkIn: CheckInDto): ResponseEntity<CheckInDto> {
+        return ResponseEntity.ok(checkInService.updateCheckIn(checkIn))
     }
 
     @DeleteMapping
