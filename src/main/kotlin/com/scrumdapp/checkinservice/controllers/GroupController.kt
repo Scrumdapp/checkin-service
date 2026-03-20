@@ -8,6 +8,7 @@ import com.scrumdapp.checkinservice.entities.CheckIn
 import com.scrumdapp.checkinservice.entities.Group
 import com.scrumdapp.checkinservice.services.CheckInService
 import com.scrumdapp.checkinservice.services.GroupService
+import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -62,7 +63,7 @@ class GroupController(
     }
 
     @PostMapping
-    fun createGroup(@RequestBody group: GroupCreateDto): ResponseEntity<GroupResponseDto> {
+    fun createGroup(@Valid @RequestBody group: GroupCreateDto): ResponseEntity<GroupResponseDto> {
         println("Group: ${group.name} + Features: ${group.features}")
         val group = groupService.createGroup(group)
         return ResponseEntity.status(HttpStatus.CREATED).body(group)
@@ -71,7 +72,7 @@ class GroupController(
     @PatchMapping("/{id}")
     fun updateGroup(
         @PathVariable id: Int,
-        @RequestBody group: GroupPatchDto): ResponseEntity<GroupResponseDto> {
+        @Valid @RequestBody group: GroupPatchDto): ResponseEntity<GroupResponseDto> {
         return ResponseEntity.ok(groupService.updateGroup(id, group))
     }
 
