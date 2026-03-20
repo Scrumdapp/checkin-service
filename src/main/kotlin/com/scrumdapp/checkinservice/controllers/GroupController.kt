@@ -1,6 +1,9 @@
 package com.scrumdapp.checkinservice.controllers
 
 import com.scrumdapp.checkinservice.dto.CheckInDto
+import com.scrumdapp.checkinservice.dto.GroupCreateDto
+import com.scrumdapp.checkinservice.dto.GroupPatchDto
+import com.scrumdapp.checkinservice.dto.GroupResponseDto
 import com.scrumdapp.checkinservice.entities.CheckIn
 import com.scrumdapp.checkinservice.entities.Group
 import com.scrumdapp.checkinservice.services.CheckInService
@@ -59,14 +62,17 @@ class GroupController(
     }
 
     @PostMapping
-    fun createGroup(@RequestBody group: Group): ResponseEntity<Group> {
+    fun createGroup(@RequestBody group: GroupCreateDto): ResponseEntity<GroupResponseDto> {
         println("Group: ${group.name} + Features: ${group.features}")
-        return ResponseEntity.status(HttpStatus.CREATED).body(groupService.createGroup(group))
+        val group = groupService.createGroup(group)
+        return ResponseEntity.status(HttpStatus.CREATED).body(group)
     }
 
-    @PatchMapping
-    fun updateGroup(@RequestBody group: Group): ResponseEntity<Group> {
-        return ResponseEntity.ok(groupService.updateGroup(group))
+    @PatchMapping("/{id}")
+    fun updateGroup(
+        @PathVariable id: Int,
+        @RequestBody group: GroupPatchDto): ResponseEntity<GroupResponseDto> {
+        return ResponseEntity.ok(groupService.updateGroup(id, group))
     }
 
     @PatchMapping("/{id}/checkins")

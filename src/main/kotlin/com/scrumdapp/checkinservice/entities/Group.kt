@@ -8,12 +8,14 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
-     var id: Int? = null
+     var id: Int = 0;
 
      var name: String? = null
 
+    @Column(nullable = true)
      var background_preference: Int? = null
 
+    @Column(nullable = true)
      var icon_preference: Int? = null
 
     @ManyToMany
@@ -22,5 +24,6 @@ public class Group {
         joinColumns = [JoinColumn(name = "group_id")],
         inverseJoinColumns = [JoinColumn(name = "group_feature_key")]
     )
+    @Column(nullable = true)
      var features: MutableSet<GroupFeature> = mutableSetOf()
 }

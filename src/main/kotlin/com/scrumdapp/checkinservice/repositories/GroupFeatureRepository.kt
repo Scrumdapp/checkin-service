@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface GroupFeatureRepository: JpaRepository<GroupFeature, String> {
     fun findAllByKey(key: String): List<GroupFeature>
-    fun findAllByKeyIn(keys: List<String>): List<GroupFeature>
+    fun findAllByKeyIn(keys: Set<String>): Set<GroupFeature>
 }
