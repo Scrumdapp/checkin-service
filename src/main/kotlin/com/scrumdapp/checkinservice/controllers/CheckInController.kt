@@ -15,15 +15,15 @@ class CheckInController(
 ) {
 
     @GetMapping
-    fun getAllCheckIns(): ResponseEntity<List<CheckInDto>> {
-        return ResponseEntity.ok(checkInService.findByGroupId(1)) // temporary
+    fun getAllCheckIns(@RequestParam groupId: Int): ResponseEntity<List<CheckInDto>> {
+        return ResponseEntity.ok(checkInService.findByGroupId(groupId))
     }
 
 
     @PostMapping
-    fun saveCheckIn(@RequestBody checkInDto: CheckInDto): ResponseEntity<CheckInDto> {
-        val saved = checkInService.saveCheckIn(checkInDto)
-        return ResponseEntity.ok(saved)
+    fun createCheckIn(@RequestBody checkInDto: CheckInDto): ResponseEntity<CheckInDto> {
+        val created = checkInService.saveCheckIn(checkInDto)
+        return ResponseEntity.status(HttpStatus.CREATED).body(created)
     }
 
 
