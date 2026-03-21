@@ -78,12 +78,12 @@ class GroupController(
 
     @PatchMapping("/{id}/checkins")
     fun updateCheckIn(@RequestBody checkIn: CheckInDto): ResponseEntity<CheckInDto> {
-        return ResponseEntity.ok(checkInService.updateCheckIn(checkIn))
+        return ResponseEntity.ok(checkInService.saveCheckIn(checkIn))
     }
 
     @PatchMapping("/{groupId}/users/{userId}/checkins")
     fun updateUserCheckIn(@RequestBody checkIn: CheckInDto): ResponseEntity<CheckInDto> {
-        return ResponseEntity.ok(checkInService.updateCheckIn(checkIn))
+        return ResponseEntity.ok(checkInService.saveCheckIn(checkIn))
     }
 
     @DeleteMapping

@@ -5,9 +5,7 @@ import com.scrumdapp.checkinservice.entities.CheckInId
 import com.scrumdapp.checkinservice.mappers.toDto
 import com.scrumdapp.checkinservice.mappers.toEntity
 import com.scrumdapp.checkinservice.repositories.CheckInRepository
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import java.util.Date
 import java.time.LocalDate
 
 
@@ -17,9 +15,9 @@ interface CheckInService {
 
     fun deleteById(id: CheckInId)
 
-    fun createCheckIn(checkIn: CheckInDto): CheckInDto
+    fun saveCheckIn(checkIn: CheckInDto): CheckInDto
 
-    fun updateCheckIn(checkIn: CheckInDto): CheckInDto
+
 
     fun findByGroupId(groupId: Int): List<CheckInDto>
 
@@ -56,14 +54,10 @@ class CheckInServiceImpl(
         checkInRepository.deleteById(id)
     }
 
-    override fun createCheckIn(checkIn: CheckInDto): CheckInDto {
+    override fun saveCheckIn(checkIn: CheckInDto): CheckInDto {
         val saved = checkInRepository.save(checkIn.toEntity())
         return saved.toDto()
-    }
 
-    override fun updateCheckIn(checkIn: CheckInDto): CheckInDto {
-        val updated = checkInRepository.save(checkIn.toEntity())
-        return updated.toDto()
     }
 
     override fun updateUserCheckIn(checkIn: CheckInDto): CheckInDto {
