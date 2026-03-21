@@ -5,7 +5,7 @@ import com.scrumdapp.checkinservice.entities.CheckInId
 import com.scrumdapp.checkinservice.mappers.toDto
 import com.scrumdapp.checkinservice.mappers.toEntity
 import com.scrumdapp.checkinservice.repositories.CheckInRepository
-import com.scrumdapp.checkinservice.repositories.GroupRepository
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.util.Date
 import java.time.LocalDate
@@ -17,7 +17,9 @@ interface CheckInService {
 
     fun deleteById(id: CheckInId)
 
-    fun saveCheckIn(checkIn: CheckInDto): CheckInDto
+    fun createCheckIn(checkIn: CheckInDto): CheckInDto
+
+    fun updateCheckIn(checkIn: CheckInDto): CheckInDto
 
     fun findByGroupId(groupId: Int): List<CheckInDto>
 
@@ -33,12 +35,13 @@ interface CheckInService {
         date: LocalDate,
     ): List<CheckInDto>
 
+    fun updateUserCheckIn(checkIn: CheckInDto): CheckInDto
+
 }
 
 @Service
 class CheckInServiceImpl(
     private val checkInRepository: CheckInRepository,
-    private val groupRepository: GroupRepository
 ) : CheckInService {
 
     override fun findById(id: CheckInId): CheckInDto? {
@@ -53,16 +56,19 @@ class CheckInServiceImpl(
         checkInRepository.deleteById(id)
     }
 
-    override fun saveCheckIn(checkIn: CheckInDto): CheckInDto {
-
-        val group = groupRepository.findById(checkIn.groupId)
-            .orElseThrow { RuntimeException("Group not found") }
-
-        val entity = checkIn.toEntity()
-        entity.group = group
-
-        val saved = checkInRepository.save(entity)
+    override fun createCheckIn(checkIn: CheckInDto): CheckInDto {
+        val saved = checkInRepository.save(checkIn.toEntity())
         return saved.toDto()
+    }
+
+    override fun updateCheckIn(checkIn: CheckInDto): CheckInDto {
+        val updated = checkInRepository.save(checkIn.toEntity())
+        return updated.toDto()
+    }
+
+    override fun updateUserCheckIn(checkIn: CheckInDto): CheckInDto {
+        val updated = checkInRepository.save(checkIn.toEntity())
+        return updated.toDto()
     }
 
     override fun findByGroupId(groupId: Int): List<CheckInDto> {

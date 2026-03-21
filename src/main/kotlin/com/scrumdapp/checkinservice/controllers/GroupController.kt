@@ -1,9 +1,14 @@
 package com.scrumdapp.checkinservice.controllers
 
 import com.scrumdapp.checkinservice.dto.CheckInDto
+import com.scrumdapp.checkinservice.dto.GroupCreateDto
+import com.scrumdapp.checkinservice.dto.GroupPatchDto
+import com.scrumdapp.checkinservice.dto.GroupResponseDto
+import com.scrumdapp.checkinservice.entities.CheckIn
 import com.scrumdapp.checkinservice.entities.Group
 import com.scrumdapp.checkinservice.services.CheckInService
 import com.scrumdapp.checkinservice.services.GroupService
+import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
@@ -46,20 +51,39 @@ class GroupController(
         @PathVariable groupId: Int,
         @PathVariable userId: Int,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startdate: LocalDate,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) enddate: LocalDate
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) enddate: LocalDate?
     ): List<CheckInDto> {
-        return checkInService.findByUserAndDateRange(groupId, userId, startdate, enddate)
+
+        return checkInService.findByUserAndDateRange(
+            groupId,
+            userId,
+            startdate,
+            enddate ?: startdate
+        )
     }
 
     @PostMapping
-    fun createGroup(@RequestBody group: Group): ResponseEntity<Group> {
+    fun createGroup(@Valid @RequestBody group: GroupCreateDto): ResponseEntity<GroupResponseDto> {
         println("Group: ${group.name} + Features: ${group.features}")
-        return ResponseEntity.status(HttpStatus.CREATED).body(groupService.createGroup(group))
+        val group = groupService.createGroup(group)
+        return ResponseEntity.status(HttpStatus.CREATED).body(group)
     }
 
-    @PatchMapping
-    fun updateGroup(@RequestBody group: Group): ResponseEntity<Group> {
-        return ResponseEntity.ok(groupService.updateGroup(group))
+    @PatchMapping("/{id}")
+    fun updateGroup(
+        @PathVariable id: Int,
+        @Valid @RequestBody group: GroupPatchDto): ResponseEntity<GroupResponseDto> {
+        return ResponseEntity.ok(groupService.updateGroup(id, group))
+    }
+
+    @PatchMapping("/{id}/checkins")
+    fun updateCheckIn(@RequestBody checkIn: CheckInDto): ResponseEntity<CheckInDto> {
+        return ResponseEntity.ok(checkInService.updateCheckIn(checkIn))
+    }
+
+    @PatchMapping("/{groupId}/users/{userId}/checkins")
+    fun updateUserCheckIn(@RequestBody checkIn: CheckInDto): ResponseEntity<CheckInDto> {
+        return ResponseEntity.ok(checkInService.updateCheckIn(checkIn))
     }
 
     @DeleteMapping

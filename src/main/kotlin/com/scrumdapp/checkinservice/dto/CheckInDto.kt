@@ -7,7 +7,7 @@ import java.time.LocalDate
 data class CheckInDto(
     val userId: Int,
     val groupId: Int,
-    val date: LocalDate,
+    val date: LocalDate?,
 
     val obstacle_comment: String?,
     val presence: Int?,

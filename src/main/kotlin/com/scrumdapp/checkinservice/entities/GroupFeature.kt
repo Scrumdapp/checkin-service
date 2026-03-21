@@ -8,7 +8,8 @@ class GroupFeature {
 
     @Id
     @Column(length = 200)
-     var key: String? = null
+     var key: String = ""
 
+    @Column(nullable = true)
      var description: String? = null
 }
