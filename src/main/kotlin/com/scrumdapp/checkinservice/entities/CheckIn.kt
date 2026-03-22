@@ -5,27 +5,20 @@ import java.io.Serializable
 import java.time.LocalDate
 import java.util.*
 
-
-data class CheckInId(val userId: Int = 0, val groupId: Int = 0, val date: LocalDate? = null) : Serializable
+@Embeddable
+data class CheckInId(var userId: Int = 0, var groupId: Int = 0, var date: LocalDate = LocalDate.MIN) : Serializable
 
 @Entity
-@IdClass(CheckInId::class)
 @Table(name = "check_in")
 class CheckIn {
 
-    @Id
-    var userId: Int = 0
-
-    @Id
-    var groupId: Int = 0
+    @EmbeddedId
+    var id: CheckInId = CheckInId()
 
     @ManyToOne
     @MapsId("groupId")
     @JoinColumn(name = "group_id")
      var group: Group? = null
-
-    @Id
-    var date: LocalDate? = null
 
     var obstacleComment: String? = null
 

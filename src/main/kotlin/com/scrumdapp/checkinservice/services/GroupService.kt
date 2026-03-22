@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service
 import java.text.SimpleDateFormat
 
 interface GroupService {
-    fun getAllGroups(): List<Group>
-    fun getGroupById(id: Int): Group?
+    fun getAllGroups(): List<GroupResponseDto>
+    fun getGroupById(id: Int): GroupResponseDto?
     fun addGroupFeatures(id: Int, featureKeys: Set<String>): Group?
     fun createGroup(groupDto: GroupCreateDto): GroupResponseDto
     fun updateGroup(id: Int, groupDto: GroupPatchDto): GroupResponseDto
@@ -27,12 +27,14 @@ class GroupServiceImpl(
     private val groupRepository: GroupRepository,
     private val groupFeatureRepository: GroupFeatureRepository,
 ) : GroupService {
-    override fun getAllGroups(): List<Group> {
-        return groupRepository.findAll()
+    override fun getAllGroups(): List<GroupResponseDto> {
+        val groups = groupRepository.findAll()
+        return groups.map { GroupMapper.toDto(it) }
     }
 
-    override fun getGroupById(id: Int): Group? {
-        return groupRepository.findGroupById(id)
+    override fun getGroupById(id: Int): GroupResponseDto? {
+        val group = groupRepository.findById(id).orElse(null) ?: throw ResourceNotFoundException()
+        return GroupMapper.toDto(group)
     }
 
     override fun addGroupFeatures(id: Int, featureKeys: Set<String>): Group? {

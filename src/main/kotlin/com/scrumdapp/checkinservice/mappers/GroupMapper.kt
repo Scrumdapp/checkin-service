@@ -13,7 +13,7 @@ object GroupMapper {
             name = entity.name,
             background_preference = entity.background_preference,
             icon_preference = entity.icon_preference,
-            features = entity.features.map { GroupFeatureDto(it.key, it.description) }.toSet()
+            features = entity.features.map { it.key }.toSet(),
         )
 
     fun applyCreate(dto: GroupCreateDto): Group {

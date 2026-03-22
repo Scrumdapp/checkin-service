@@ -1,21 +1,20 @@
 package com.scrumdapp.checkinservice.controllers
 
-import com.scrumdapp.checkinservice.dto.CheckInDto
+import com.scrumdapp.checkinservice.dto.CheckinResponseDto
+import com.scrumdapp.checkinservice.dto.CheckinUpdateDto
+import com.scrumdapp.checkinservice.dto.DateRange
 import com.scrumdapp.checkinservice.dto.GroupCreateDto
 import com.scrumdapp.checkinservice.dto.GroupPatchDto
 import com.scrumdapp.checkinservice.dto.GroupResponseDto
-import com.scrumdapp.checkinservice.entities.CheckIn
+import com.scrumdapp.checkinservice.entities.CheckInId
 import com.scrumdapp.checkinservice.entities.Group
 import com.scrumdapp.checkinservice.services.CheckInService
 import com.scrumdapp.checkinservice.services.GroupService
 import jakarta.validation.Valid
-import org.slf4j.LoggerFactory
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.*
-import java.util.logging.Logger
 import java.time.LocalDate
 
 @RestController
@@ -26,12 +25,12 @@ class GroupController(
 ) {
 
     @GetMapping
-    fun getAllGroups(): ResponseEntity<List<Group>> {
+    fun getAllGroups(): ResponseEntity<List<GroupResponseDto>> {
         return ResponseEntity.ok(groupService.getAllGroups())
     }
 
     @GetMapping("/{id}")
-    fun getGroup(@PathVariable id: Int): ResponseEntity<Group> {
+    fun getGroup(@PathVariable id: Int): ResponseEntity<GroupResponseDto> {
         val group = groupService.getGroupById(id)
         println("Group: ${group?.id}")
         return ResponseEntity.ok(group);
@@ -40,26 +39,20 @@ class GroupController(
     @GetMapping("/{id}/checkins")
     fun getGroupCheckIns(
         @PathVariable id: Int,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateTime: LocalDate
-    ): List<CheckInDto> {
-
-        return checkInService.findByGroupIdAndDate(id, dateTime)
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) dateTime: LocalDate?
+    ): List<CheckinResponseDto> {
+        return checkInService.getByGroup(id, dateTime)
     }
 
     @GetMapping("/{groupId}/users/{userId}/checkins")
     fun getUserCheckInsBetweenDates(
         @PathVariable groupId: Int,
         @PathVariable userId: Int,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startdate: LocalDate,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) enddate: LocalDate?
-    ): List<CheckInDto> {
-
-        return checkInService.findByUserAndDateRange(
-            groupId,
-            userId,
-            startdate,
-            enddate ?: startdate
-        )
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startDate: LocalDate,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) endDate: LocalDate
+    ): List<CheckinResponseDto> {
+       val dateRange = DateRange(startDate, endDate)
+        return checkInService.getByGroupAndUser(groupId, userId, dateRange)
     }
 
     @PostMapping
@@ -76,14 +69,32 @@ class GroupController(
         return ResponseEntity.ok(groupService.updateGroup(id, group))
     }
 
-    @PatchMapping("/{id}/checkins")
-    fun updateCheckIn(@RequestBody checkIn: CheckInDto): ResponseEntity<CheckInDto> {
-        return ResponseEntity.ok(checkInService.updateCheckIn(checkIn))
-    }
+    // Will patch later (takes in List<CheckinUpdateDto>
+//    @PatchMapping("/{groupId}/checkins")
+//    fun updateCheckIn(
+//        @PathVariable groupId: Int,
+//        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate,
+//        @RequestBody checkinDto: CheckinUpdateDto): ResponseEntity<CheckinResponseDto> {
+//        val checkinId = CheckInId(
+//            userId = 0, // Not yet implemented
+//            groupId = groupId,
+//            date = date,
+//        )
+//        return ResponseEntity.ok(checkInService.updateCheckIn(checkinId, checkinDto))
+//    }
 
     @PatchMapping("/{groupId}/users/{userId}/checkins")
-    fun updateUserCheckIn(@RequestBody checkIn: CheckInDto): ResponseEntity<CheckInDto> {
-        return ResponseEntity.ok(checkInService.updateCheckIn(checkIn))
+    fun updateUserCheckIn(
+        @PathVariable groupId: Int,
+        @PathVariable userId: Int,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate,
+        @RequestBody checkinDto: CheckinUpdateDto): ResponseEntity<CheckinResponseDto> {
+        val checkinId = CheckInId(
+            userId = userId,
+            groupId = groupId,
+            date = date,
+        )
+        return ResponseEntity.ok(checkInService.updateCheckin(checkinId, checkinDto))
     }
 
     @DeleteMapping
