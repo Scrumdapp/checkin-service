@@ -1,5 +1,6 @@
 package com.scrumdapp.checkinservice.controllers
 
+import com.scrumdapp.checkinservice.dto.CheckinCreateDto
 import com.scrumdapp.checkinservice.dto.CheckinResponseDto
 import com.scrumdapp.checkinservice.dto.CheckinUpdateDto
 import com.scrumdapp.checkinservice.dto.DateRange
@@ -23,6 +24,8 @@ class GroupController(
     private val groupService: GroupService,
     private val checkInService: CheckInService
 ) {
+
+
 
     @GetMapping
     fun getAllGroups(): ResponseEntity<List<GroupResponseDto>> {
@@ -70,18 +73,15 @@ class GroupController(
     }
 
     // Will patch later (takes in List<CheckinUpdateDto>
-//    @PatchMapping("/{groupId}/checkins")
-//    fun updateCheckIn(
-//        @PathVariable groupId: Int,
-//        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate,
-//        @RequestBody checkinDto: CheckinUpdateDto): ResponseEntity<CheckinResponseDto> {
-//        val checkinId = CheckInId(
-//            userId = 0, // Not yet implemented
-//            groupId = groupId,
-//            date = date,
-//        )
-//        return ResponseEntity.ok(checkInService.updateCheckIn(checkinId, checkinDto))
-//    }
+    @PatchMapping("/{groupId}/checkins")
+    fun updateCheckIn(
+        @PathVariable groupId: Int,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) date: LocalDate,
+        @RequestBody checkinDto: List<CheckinCreateDto>): ResponseEntity<List<CheckinResponseDto>> {
+
+        checkinDto.forEach { it.date = date }
+        return ResponseEntity.ok(checkInService.createBatchCheckin(groupId, checkinDto))
+    }
 
     @PatchMapping("/{groupId}/users/{userId}/checkins")
     fun updateUserCheckIn(

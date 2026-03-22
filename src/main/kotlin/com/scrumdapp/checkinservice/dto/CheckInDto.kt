@@ -59,7 +59,7 @@ data class CheckinResponseDto(
 data class CheckinCreateDto(
 
     @field:DateRange(maxPastDays = 7, maxFutureDays = 7)
-    val date: LocalDate?,
+    var date: LocalDate?,
     val userId: Int? = null,
 
     val obstacle_comment: String? = null,
