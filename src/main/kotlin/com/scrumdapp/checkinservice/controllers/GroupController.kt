@@ -51,10 +51,13 @@ class GroupController(
     fun getUserCheckInsBetweenDates(
         @PathVariable groupId: Int,
         @PathVariable userId: Int,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startDate: LocalDate,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) endDate: LocalDate
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startDate: LocalDate?,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) endDate: LocalDate?
     ): List<CheckinResponseDto> {
-       val dateRange = DateRange(startDate, endDate)
+        var dateRange: DateRange? = null
+        if (startDate != null && endDate != null) {
+            dateRange = DateRange(startDate, endDate)
+        }
         return checkInService.getByGroupAndUser(groupId, userId, dateRange)
     }
 
