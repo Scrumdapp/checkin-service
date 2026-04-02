@@ -1,15 +1,21 @@
 package com.scrumdapp.checkinservice.entities
 
 import jakarta.persistence.*
+import java.io.Serializable
+import java.time.LocalDate
 
 @Entity
-@Table(name = "features")
-class GroupFeature {
+@Table(name = "group_features")
+class GroupFeature(
 
     @Id
-    @Column(length = 200)
-     var key: String = ""
+    var key: Int? = null,
 
-    @Column(nullable = true)
-     var description: String? = null
-}
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "key")
+    var group: Group? = null,
+
+    @Column(nullable = false)
+    var description: String? = null
+)

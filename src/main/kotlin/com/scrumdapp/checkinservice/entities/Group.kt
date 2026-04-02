@@ -1,29 +1,26 @@
 package com.scrumdapp.checkinservice.entities
 
 import jakarta.persistence.*
+import jakarta.validation.constraints.Size
 
 @Entity
 @Table(name = "groups")
-public class Group {
+class Group {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int = 0
+
     @Column(nullable = false)
-     var id: Int = 0;
-
-     var name: String? = null
-
-    @Column(nullable = true)
-     var background_preference: Int? = null
+    @Size(min = 3, max = 30)
+    var name: String? = null
 
     @Column(nullable = true)
-     var icon_preference: Int? = null
+    var background_preference: Int? = null
 
-    @ManyToMany
-    @JoinTable(
-        name = "group_feature",
-        joinColumns = [JoinColumn(name = "group_id")],
-        inverseJoinColumns = [JoinColumn(name = "group_feature_key")]
-    )
-    @Column(nullable = true)
-     var features: MutableSet<GroupFeature> = mutableSetOf()
+    @Column(nullable = false)
+    var is_active: Boolean = false
+
+    @OneToOne(mappedBy = "group", cascade = [CascadeType.ALL])
+    var feature: GroupFeature? = null
 }

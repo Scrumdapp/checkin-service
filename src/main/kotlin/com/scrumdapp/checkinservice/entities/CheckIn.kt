@@ -18,7 +18,7 @@ class CheckIn {
     @ManyToOne
     @MapsId("groupId")
     @JoinColumn(name = "group_id")
-     var group: Group? = null
+    var group: Group? = null
 
     var obstacleComment: String? = null
 
